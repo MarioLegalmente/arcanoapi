@@ -14,7 +14,7 @@ export default function arcano() {
     }
 
     function json(content) {
-        this.setHeader('Content-Type', 'application/json')
+        this.setHeader('Content-Type','application/json')
         this.end(
             JSON.stringify(content))
     }
@@ -29,7 +29,7 @@ export default function arcano() {
 
         let index = -1;
 
-        for (let i = initial; i < middleware.length; i++) {
+        for (let i = initial; i < middleware.length; i ++) {
 
             if (middleware[i].route) {
                 if (
