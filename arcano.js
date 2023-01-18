@@ -13,9 +13,17 @@ export default function arcano() {
         return this;
     }
 
+    function json(content) {
+        this.setHeader('Content-Type', 'application/json')
+        this.end(
+            JSON.stringify(content))
+    }
+
     const app = function (req, res) {
         res.send = send;
         res.status = status;
+        res.json = json;
+
         const { method, url } = req;
         const { pathname } = parse(url);
 

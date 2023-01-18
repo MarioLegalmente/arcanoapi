@@ -17,4 +17,15 @@ describe('API', () => {
 
         expect(response.text).toEqual(expected);
     });
+
+    test('supports JSON format', async () => {
+        const response = await request(app).get('/healthy');
+        const expected = {
+            message:'Welcome to the ArcanoAPI',
+        }
+
+        console.log(response.text)
+        expect(JSON.parse(response.text)).toEqual(expected);
+        
+    });
 });
