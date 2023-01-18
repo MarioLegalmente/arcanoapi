@@ -19,7 +19,7 @@ export default function arcano() {
             JSON.stringify(content))
     }
 
-    const app = function (req, res) {
+    const app =  function next( req, res, initial = 0 ) {
         res.send = send;
         res.status = status;
         res.json = json;
@@ -29,7 +29,7 @@ export default function arcano() {
 
         let index = -1;
 
-        for (let i = 0; i < middleware.length; i++) {
+        for (let i = initial; i < middleware.length; i++) {
 
             if (middleware[i].route) {
                 if (
@@ -47,7 +47,9 @@ export default function arcano() {
             res.statusCode = 404;
             res.end('Route Not Found')
         } else {
-            middleware[index].fun(req, res)
+            middleware[index].fun(req, res, () => {
+                next( req, res, index + 1 )
+            })
         }
     }
 

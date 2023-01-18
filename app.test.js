@@ -28,4 +28,10 @@ describe('API', () => {
         expect(JSON.parse(response.text)).toEqual(expected);
         
     });
+
+    test('set id for each incoming request', async () => {
+        const response = await request(app).get('/request')
+
+        expect(JSON.parse(response.text)).toHaveProperty('id')
+    })
 });
