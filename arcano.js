@@ -1,5 +1,22 @@
 import { parse } from 'url'
 
+function extarctQuery(qs){
+    const query = {}
+
+    qs
+    .split('&')
+    .map((item) => item.split('='))
+    .forEach(item => {
+      const [ name, value ] = item;
+
+      Object.defineProperty(query, name, {
+        value,
+        enumerable: true
+      })
+    });
+    return query;
+}
+
 export default function arcano() {
     const middleware = []
 
@@ -25,7 +42,7 @@ export default function arcano() {
         res.json = json;
 
         const { method, url } = req;
-        const { pathname } = parse(url);
+        const { pathname, query } = parse(url);
 
         let index = -1;
 
@@ -34,7 +51,9 @@ export default function arcano() {
             if (middleware[i].route) {
                 if (
                     middleware[i].route === pathname &&
-                    middleware[i].method === method) {
+                    middleware[i].method === method
+                    ) {
+                    req.query = extarctQuery( query || '')
                     index = i;
                     break;
                 }
@@ -53,12 +72,28 @@ export default function arcano() {
         }
     }
 
-    app.get = function (route, fun) {
-        middleware.push({
-            route,
-            fun,
-            method: 'GET',
-        });
+    app.get = function (route, ...funs) {
+        for (let index = 0; index < funs.length; index++) {
+            const fun = funs[index];
+            
+            middleware.push({
+                route,
+                fun,
+                method: 'GET',
+            });
+        }
+    };
+
+    app.post = function (route, ...funs) {
+        for (let index = 0; index < funs.length; index++) {
+            const fun = funs[index];
+            
+            middleware.push({
+                route,
+                fun,
+                method: 'POST'
+            });
+        }
     };
 
     app.use = function (fun) {
