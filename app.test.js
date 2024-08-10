@@ -5,25 +5,25 @@ import app from './app.js'
 describe('API', () => {
 
     test('has a root endpoint', async () => {
-        const response = await request(app).get('/')
-        const expected = 'Hello World';
+        const response = await request(app).get('/');
+        const expected = 'Hello World in NODE.js RestfulAPI';
 
         expect(response.text).toEqual(expected);
     });
 
     test('has a catch endpoint', async () => {
-        const response = await request(app).get('/unknwon')
-        const expected = 'Route not found';
+        const response = await request(app).get('/kdkkdkdwk');
+        const expected = 'Route not Found for moment';
 
         expect(response.text).toEqual(expected);
     });
 
+
     test('supports JSON format', async () => {
         const response = await request(app).get('/healthy');
         const expected = {
-            message: 'Welcome to the ArcanoAPI',
+            message: 'Welcome to the ArcanoAPI in NODE.js',
         }
-
         console.log(response.text)
         expect(JSON.parse(response.text)).toEqual(expected);
 
@@ -33,7 +33,7 @@ describe('API', () => {
         const response = await request(app).get('/request')
 
         expect(JSON.parse(response.text)).toHaveProperty('id')
-    })
+    });
 
     test('can login with Authorization token', async () => {
         const response = await request(app)
@@ -41,9 +41,9 @@ describe('API', () => {
             .set('Authorization', 'token')
 
         expect(JSON.parse(response.text)).toEqual({
-            success: true
+            success: true,
         });
-    })
+    });
 
     test('cannot login withot Authorization token', async () => {
         const response = await request(app)
@@ -53,11 +53,11 @@ describe('API', () => {
         expect(JSON.parse(response.text)).toEqual({
             error: 'Unauthorized'
         });
-    })
+    });
 
     test('users can be create', async () => {
         const data = {
-            name: 'MarioLegalmente',
+            name: 'Mario Legalmente',
             email: 'me@mariolegalmente.com'
         }
         const response = await request(app)
@@ -67,9 +67,9 @@ describe('API', () => {
 
         expect(response.status).toEqual(201)
         expect(JSON.parse(response.text)).toEqual({
-            data
-        })
-    })
+            data,
+        });
+    });
 
     test('list with query parameters', async () => {
         const options = {
@@ -77,12 +77,14 @@ describe('API', () => {
             limit: '10'
         }
         const response = await request(app)
-.get(`/users?offset=${options.offset}&limit=${options.limit}`)
+            .get(`/users?offset=${options.offset}&limit=${options.limit}`)
 
         expect(JSON.parse(response.text)).toEqual({
             data: [],
-            meta: options
-        })
+            meta: options,
+        });
 
-    })
+    });
+
+  
 });

@@ -1,5 +1,4 @@
 import http from 'http';
-
 import app from './app.js';
 
 const hostname = '127.0.0.1';
